@@ -23,9 +23,15 @@ var (
 	binPath           string
 	err               error
 	fakeDataDogServer *ghttp.Server
+
+	applicationKey string
+	apiKey         string
 )
 
 var _ = BeforeEach(func() {
+	applicationKey = "some-application-key"
+	apiKey = "some-api-key"
+
 	fakeDataDogServer = ghttp.NewServer()
 
 	binPath, err = gexec.Build("github.com/concourse/datadog-resource/cmd/check")
@@ -36,7 +42,15 @@ var _ = AfterEach(func() {
 	fakeDataDogServer.Close()
 })
 
-func RunCheck(payload cmd.CheckPayload) *gexec.Session {
+func RunCheck(version *cmd.Version) *gexec.Session {
+	payload := cmd.CheckPayload{
+		Source: cmd.Source{
+			ApplicationKey: "foobar",
+			ApiKey:         "barbaz",
+		},
+		Version: version,
+	}
+
 	b, err := json.Marshal(&payload)
 	Expect(err).NotTo(HaveOccurred())
 
