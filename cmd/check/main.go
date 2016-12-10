@@ -35,11 +35,7 @@ func main() {
 		if len(events) > 0 {
 			e = events[0]
 
-			output = append(
-				output,
-				cmd.Version{
-					Id: strconv.Itoa(e.Id),
-				})
+			output = output.AddEvent(e)
 		}
 	} else {
 		switch len(events) {
@@ -47,11 +43,7 @@ func main() {
 			break
 		case 1:
 			e = events[0]
-			output = append(
-				output,
-				cmd.Version{
-					Id: strconv.Itoa(e.Id),
-				})
+			output = output.AddEvent(e)
 			break
 		default:
 			needle, err := strconv.Atoi(payload.Version.Id)
@@ -61,11 +53,7 @@ func main() {
 
 			for _, e = range events {
 				if e.Id >= needle {
-					output = append(
-						output,
-						cmd.Version{
-							Id: strconv.Itoa(e.Id),
-						})
+					output = output.AddEvent(e)
 				}
 			}
 
@@ -83,3 +71,11 @@ func main() {
 }
 
 type Output []cmd.Version
+
+func (o Output) AddEvent(e datadog.Event) Output {
+	return append(
+		o,
+		cmd.Version{
+			Id: strconv.Itoa(e.Id),
+		})
+}
