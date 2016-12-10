@@ -9,6 +9,7 @@ import (
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
+	"github.com/zorkian/go-datadog-api"
 )
 
 var _ = Describe("Check", func() {
@@ -38,9 +39,7 @@ var _ = Describe("Check", func() {
 
 		Context("when there are no events", func() {
 			It("outputs an empty JSON", func() {
-				fakeDataDogServer.AppendHandlers(
-					ghttp.RespondWith(200, nil, nil),
-				)
+				RespondWithEvents(nil)
 
 				session = RunCheck(cmd.CheckPayload{
 					Source: cmd.Source{
@@ -52,5 +51,34 @@ var _ = Describe("Check", func() {
 				Expect(session).To(gbytes.Say("\\[\\]"))
 			})
 		})
+
+		Context("when there is one event", func() {
+			It("outputs a single element array with that version as id", func() {
+				RespondWithEvents([]datadog.Event{
+					{Id: 100},
+				})
+
+				session = RunCheck(cmd.CheckPayload{
+					Source: cmd.Source{
+						ApplicationKey: "foobar",
+						ApiKey:         "barbaz",
+					},
+				})
+
+				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+			})
+		})
 	})
 })
+
+type Response struct {
+	Events []datadog.Event `json:"events"`
+}
+
+func RespondWithEvents(e []datadog.Event) {
+	fakeDataDogServer.AppendHandlers(
+		ghttp.RespondWithJSONEncoded(200, Response{
+			Events: e,
+		}),
+	)
+}

@@ -7,6 +7,8 @@ import (
 
 	"math"
 
+	"strconv"
+
 	"github.com/concourse/datadog-resource/cmd"
 	"github.com/zorkian/go-datadog-api"
 )
@@ -21,12 +23,16 @@ func main() {
 
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
-	_, err := c.GetEvents(0, math.MaxInt8, "", "", "")
+	events, err := c.GetEvents(0, math.MaxInt8, "", "", "")
 	if err != nil {
 		panic(err)
 	}
 
 	output := make(Output, 0)
+
+	for _, e := range events {
+		output = append(output, Version{strconv.Itoa(e.Id)})
+	}
 
 	json.NewEncoder(os.Stdout).Encode(&output)
 }
@@ -34,5 +40,5 @@ func main() {
 type Output []Version
 
 type Version struct {
-	Id string
+	Id string `json:"id"`
 }
