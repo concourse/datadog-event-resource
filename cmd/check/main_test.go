@@ -116,6 +116,57 @@ var _ = Describe("Check", func() {
 			})
 		})
 	})
+
+	Context("when called with source configuration and version", func() {
+		var (
+			id string
+		)
+
+		BeforeEach(func() {
+			id = "90"
+		})
+
+		AfterEach(func() {
+			Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(1))
+		})
+
+		Context("when there are no events", func() {
+			It("outputs an empty JSON", func() {
+				RespondWithEvents(nil)
+
+				session = RunCheck(&id)
+
+				Expect(session).To(gbytes.Say("\\[\\]"))
+			})
+		})
+
+		Context("when there is one event", func() {
+			It("outputs a single element array with that version as id", func() {
+				RespondWithEvents([]datadog.Event{
+					{Id: 100},
+				})
+
+				session = RunCheck(&id)
+
+				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+			})
+		})
+
+		Context("when there are multiple events", func() {
+			It("outputs a array with the all events more recent (self-inclusive), reversed", func() {
+				RespondWithEvents([]datadog.Event{
+					{Id: 110},
+					{Id: 100},
+					{Id: 90},
+					{Id: 80},
+				})
+
+				session = RunCheck(&id)
+
+				Expect(session).To(gbytes.Say(`\[{"id":"90"},{"id":"100"},{"id":"110"}\]`))
+			})
+		})
+	})
 })
 
 type Response struct {

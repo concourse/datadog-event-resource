@@ -42,7 +42,14 @@ var _ = AfterEach(func() {
 	fakeDataDogServer.Close()
 })
 
-func RunCheck(version *cmd.Version) *gexec.Session {
+func RunCheck(id *string) *gexec.Session {
+	var version *cmd.Version
+	if id != nil {
+		version = &cmd.Version{
+			Id: *id,
+		}
+	}
+
 	payload := cmd.CheckPayload{
 		Source: cmd.Source{
 			ApplicationKey: "foobar",

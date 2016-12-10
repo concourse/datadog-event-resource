@@ -30,15 +30,52 @@ func main() {
 
 	output := make(Output, 0)
 
+	var e datadog.Event
 	if payload.Version == nil {
 		if len(events) > 0 {
-			e := events[0]
+			e = events[0]
 
 			output = append(
 				output,
 				cmd.Version{
 					Id: strconv.Itoa(e.Id),
 				})
+		}
+	} else {
+		switch len(events) {
+		case 0:
+			break
+		case 1:
+			e = events[0]
+			output = append(
+				output,
+				cmd.Version{
+					Id: strconv.Itoa(e.Id),
+				})
+			break
+		default:
+			needle, err := strconv.Atoi(payload.Version.Id)
+			if err != nil {
+				panic(err)
+			}
+
+			for _, e = range events {
+				if e.Id >= needle {
+					output = append(
+						output,
+						cmd.Version{
+							Id: strconv.Itoa(e.Id),
+						})
+				}
+			}
+
+			// Reverse
+			for i := len(output)/2 - 1; i >= 0; i-- {
+				opp := len(output) - 1 - i
+				output[i], output[opp] = output[opp], output[i]
+			}
+
+			break
 		}
 	}
 
