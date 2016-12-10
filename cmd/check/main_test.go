@@ -32,7 +32,7 @@ var _ = Describe("Check", func() {
 		})
 	})
 
-	Context("when called with source configuration", func() {
+	Context("when called with source configuration but no version", func() {
 		AfterEach(func() {
 			Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(1))
 		})
@@ -56,6 +56,26 @@ var _ = Describe("Check", func() {
 			It("outputs a single element array with that version as id", func() {
 				RespondWithEvents([]datadog.Event{
 					{Id: 100},
+				})
+
+				session = RunCheck(cmd.CheckPayload{
+					Source: cmd.Source{
+						ApplicationKey: "foobar",
+						ApiKey:         "barbaz",
+					},
+				})
+
+				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+			})
+		})
+
+		Context("when there are multiple events", func() {
+			It("outputs a single element array with the first version (most recent) as id", func() {
+				RespondWithEvents([]datadog.Event{
+					{Id: 100},
+					{Id: 99},
+					{Id: 98},
+					{Id: 97},
 				})
 
 				session = RunCheck(cmd.CheckPayload{

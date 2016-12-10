@@ -30,15 +30,19 @@ func main() {
 
 	output := make(Output, 0)
 
-	for _, e := range events {
-		output = append(output, Version{strconv.Itoa(e.Id)})
+	if payload.Version == nil {
+		if len(events) > 0 {
+			e := events[0]
+
+			output = append(
+				output,
+				cmd.Version{
+					Id: strconv.Itoa(e.Id),
+				})
+		}
 	}
 
 	json.NewEncoder(os.Stdout).Encode(&output)
 }
 
-type Output []Version
-
-type Version struct {
-	Id string `json:"id"`
-}
+type Output []cmd.Version
