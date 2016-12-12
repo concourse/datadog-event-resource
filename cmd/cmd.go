@@ -1,8 +1,13 @@
 package cmd
 
 type CheckPayload struct {
-	Source Source `json:"source"`
+	Source  Source   `json:"source"`
 	Version *Version `json:"version,omitempty"`
+}
+
+type InPayload struct {
+	Source  Source  `json:"source"`
+	Version Version `json:"version"`
 }
 
 type Source struct {
@@ -12,4 +17,14 @@ type Source struct {
 
 type Version struct {
 	Id string `json:"id"`
+}
+
+type InResponse struct {
+	Version  Version    `json:"version"`
+	Metadata []Metadata `json:"metadata"`
+}
+
+type Metadata struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
