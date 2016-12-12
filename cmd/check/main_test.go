@@ -1,8 +1,6 @@
 package main_test
 
 import (
-	"os/exec"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
@@ -16,21 +14,6 @@ var _ = Describe("Check", func() {
 		session *gexec.Session
 	)
 
-	Context("when called with no arguments", func() {
-		AfterEach(func() {
-			Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(0))
-		})
-
-		It("fails when called with no arguments", func() {
-			session, err = gexec.Start(exec.Command(binPath), GinkgoWriter, GinkgoWriter)
-			Expect(err).NotTo(HaveOccurred())
-
-			<-session.Exited
-
-			Expect(session).To(gexec.Exit(1))
-		})
-	})
-
 	Context("when called with source configuration but no version", func() {
 		AfterEach(func() {
 			Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(1))
@@ -42,7 +25,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say("\\[\\]"))
+				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
 		})
 
@@ -54,7 +37,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
@@ -69,7 +52,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 	})
@@ -85,7 +68,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say("\\[\\]"))
+				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
 		})
 
@@ -97,7 +80,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
@@ -112,7 +95,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(nil)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 	})
@@ -136,7 +119,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(&id)
 
-				Expect(session).To(gbytes.Say("\\[\\]"))
+				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
 		})
 
@@ -148,7 +131,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(&id)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
@@ -163,7 +146,7 @@ var _ = Describe("Check", func() {
 
 				session = RunCheck(&id)
 
-				Expect(session).To(gbytes.Say(`\[{"id":"90"},{"id":"100"},{"id":"110"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"90"},{"id":"100"},{"id":"110"}\]`))
 			})
 		})
 	})

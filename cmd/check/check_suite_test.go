@@ -9,6 +9,7 @@ import (
 
 	"encoding/json"
 
+	"bytes"
 	"github.com/concourse/datadog-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
@@ -52,8 +53,8 @@ func RunCheck(id *string) *gexec.Session {
 
 	payload := cmd.CheckPayload{
 		Source: cmd.Source{
-			ApplicationKey: "foobar",
-			ApiKey:         "barbaz",
+			ApplicationKey: applicationKey,
+			ApiKey:         apiKey,
 		},
 		Version: version,
 	}
@@ -61,7 +62,8 @@ func RunCheck(id *string) *gexec.Session {
 	b, err := json.Marshal(&payload)
 	Expect(err).NotTo(HaveOccurred())
 
-	c := exec.Command(binPath, string(b))
+	c := exec.Command(binPath)
+	c.Stdin = bytes.NewBuffer(b)
 	c.Env = append(c.Env, "DATADOG_HOST=http://"+fakeDataDogServer.Addr())
 	sess, err := gexec.Start(c, GinkgoWriter, GinkgoWriter)
 	Expect(err).NotTo(HaveOccurred())

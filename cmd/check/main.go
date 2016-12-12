@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"os"
 
@@ -14,12 +13,8 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		os.Exit(1)
-	}
-
 	var payload cmd.CheckPayload
-	json.NewDecoder(bytes.NewBufferString(os.Args[1])).Decode(&payload)
+	json.NewDecoder(os.Stdin).Decode(&payload)
 
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
