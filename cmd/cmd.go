@@ -30,3 +30,24 @@ type InResponse struct {
 	Version  Version    `json:"version"`
 	Metadata []Metadata `json:"metadata"`
 }
+
+type OutPayload struct {
+	Source Source    `json:"source"`
+	Params OutParams `json:"params"`
+}
+
+type OutParams struct {
+	Title       string   `json:"title,omitempty"`
+	Text        string   `json:"text,omitempty"`
+	Priority    string   `json:"priority,omitempty"`
+	AlertType   string   `json:"alert_type,omitempty"`
+	Host        string   `json:"host,omitempty"`
+	Aggregation string   `json:"aggregation_key,omitempty"`
+	SourceType  string   `json:"source_type_name,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
+}
+
+type OutResponse struct {
+	Version  Version    `json:"version"`
+	Metadata []Metadata `json:"metadata"`
+}
