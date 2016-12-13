@@ -14,7 +14,10 @@ import (
 
 func main() {
 	var payload cmd.CheckPayload
-	json.NewDecoder(os.Stdin).Decode(&payload)
+	err := json.NewDecoder(os.Stdin).Decode(&payload)
+	if err != nil {
+		panic(err)
+	}
 
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
