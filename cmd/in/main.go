@@ -97,7 +97,7 @@ func GenerateMetadata(e *datadog.Event) ([]cmd.Metadata, error) {
 
 	if e.Time != 0 {
 		date := time.Unix(int64(e.Time), 0)
-		metadata = append(metadata, cmd.Metadata{Name: "date_happened", Value: date.Format(layout)})
+		metadata = append(metadata, cmd.Metadata{Name: "date_happened", Value: date.Local().Format(layout)})
 	}
 
 	if e.Priority != "" {

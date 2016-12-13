@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"bytes"
+
 	"github.com/concourse/datadog-resource/cmd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -63,7 +64,7 @@ var _ = Describe("In", func() {
 			cmd.Metadata{Name: "id", Value: strconv.Itoa(id)},
 			cmd.Metadata{Name: "title", Value: "some-datadog-event"},
 			cmd.Metadata{Name: "text", Value: "some-datadog-event-text"},
-			cmd.Metadata{Name: "date_happened", Value: timestamp},
+			cmd.Metadata{Name: "date_happened", Value: t.Local().Format(layout)},
 			cmd.Metadata{Name: "priority", Value: "normal"},
 			cmd.Metadata{Name: "alert_type", Value: "info"},
 		))

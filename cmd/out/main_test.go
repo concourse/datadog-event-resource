@@ -30,7 +30,6 @@ var _ = Describe("Out", func() {
 		timestamp = "2016-12-12 14:33:04 -0800"
 		t, err = time.Parse(layout, timestamp)
 		Expect(err).NotTo(HaveOccurred())
-
 	})
 
 	Context("when given params containing a static event to emit", func() {
@@ -99,7 +98,7 @@ var _ = Describe("Out", func() {
 				cmd.Metadata{Name: "id", Value: "1234"},
 				cmd.Metadata{Name: "title", Value: "some-datadog-event"},
 				cmd.Metadata{Name: "text", Value: "some-datadog-event-text"},
-				cmd.Metadata{Name: "date_happened", Value: timestamp},
+				cmd.Metadata{Name: "date_happened", Value: t.Local().Format(layout)},
 				cmd.Metadata{Name: "priority", Value: "normal"},
 				cmd.Metadata{Name: "alert_type", Value: "info"},
 				cmd.Metadata{Name: "host", Value: "localhost"},
