@@ -20,48 +20,11 @@
 			"notests": true
 		},
 		{
-			"importpath": "github.com/onsi/ginkgo/config",
+			"importpath": "github.com/onsi/ginkgo",
 			"repository": "https://github.com/onsi/ginkgo",
 			"vcs": "git",
 			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
 			"branch": "master",
-			"path": "config",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/onsi/ginkgo/ginkgo",
-			"repository": "https://github.com/onsi/ginkgo",
-			"vcs": "git",
-			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
-			"branch": "master",
-			"path": "/ginkgo",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/onsi/ginkgo/internal/remote",
-			"repository": "https://github.com/onsi/ginkgo",
-			"vcs": "git",
-			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
-			"branch": "master",
-			"path": "internal/remote",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/onsi/ginkgo/reporters",
-			"repository": "https://github.com/onsi/ginkgo",
-			"vcs": "git",
-			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
-			"branch": "master",
-			"path": "reporters",
-			"notests": true
-		},
-		{
-			"importpath": "github.com/onsi/ginkgo/types",
-			"repository": "https://github.com/onsi/ginkgo",
-			"vcs": "git",
-			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
-			"branch": "master",
-			"path": "types",
 			"notests": true
 		},
 		{
