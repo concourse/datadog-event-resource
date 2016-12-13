@@ -12,9 +12,9 @@ Fetch or emit events to Datadog.
 
 ## Behavior
 
-### `check`: Listen for events in the event stream.
+### `check`: Listen for events in the event stream from the last 32 days.
 
-Detects new events that have been published to the Datadog event stream.
+Detects new events that have been published to the Datadog event stream within the last 32 days.
 
 
 ### `in`: Fetch an event

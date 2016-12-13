@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"os"
 
-	"math"
-
 	"strconv"
+
+	"time"
 
 	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/zorkian/go-datadog-api"
@@ -21,7 +21,9 @@ func main() {
 
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
-	events, err := c.GetEvents(0, math.MaxInt8, "", "", "")
+	end := int(time.Now().Add(24 * time.Hour).Unix())
+	beginning := end - 2764800
+	events, err := c.GetEvents(beginning, end, "", "", "")
 	if err != nil {
 		panic(err)
 	}
