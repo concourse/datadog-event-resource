@@ -48,7 +48,7 @@ Places the following files in the destination:
 
 ### `out`: Emit an event to Datadog
 
-Emits an event based on the static configuration defined in your parameters.
+Emits an event based on the static configuration defined in your parameters. Based on the [Datadog API](http://docs.datadoghq.com/api/?lang=console#events-post)
 
 #### Parameters
 
