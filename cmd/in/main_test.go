@@ -11,7 +11,7 @@ import (
 
 	"bytes"
 
-	"github.com/concourse/datadog-resource/cmd"
+	"github.com/concourse/datadog-event-resource/cmd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"

@@ -8,7 +8,7 @@ import (
 
 	"strconv"
 
-	"github.com/concourse/datadog-resource/cmd"
+	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/zorkian/go-datadog-api"
 )
 

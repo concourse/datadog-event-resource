@@ -72,8 +72,8 @@ Emits an event based on the static configuration defined in your parameters. Bas
 ### Resource
 
 ```yaml
-- name: datadog
-  type: datadog
+- name: datadog-event
+  type: datadog-event
   source:
     api_key: API-KEY
     application_key: APPLICATION-KEY
@@ -82,11 +82,11 @@ Emits an event based on the static configuration defined in your parameters. Bas
 ### Plan
 
 ```yaml
-- get: datadog
+- get: datadog-event
 ```
 
 ```yaml
-- put: datadog
+- put: datadog-event
   params:
     title: Did you hear the news today?
     text: Oh boy!

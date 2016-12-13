@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 
 	"bytes"
-	"github.com/concourse/datadog-resource/cmd"
+	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
 )
@@ -35,7 +35,7 @@ var _ = BeforeEach(func() {
 
 	fakeDataDogServer = ghttp.NewServer()
 
-	binPath, err = gexec.Build("github.com/concourse/datadog-resource/cmd/check")
+	binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/check")
 	Expect(err).NotTo(HaveOccurred())
 })
 

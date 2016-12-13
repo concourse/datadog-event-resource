@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/concourse/datadog-resource/cmd"
+	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
 )
@@ -38,7 +38,7 @@ var _ = BeforeEach(func() {
 
 	fakeDataDogServer = ghttp.NewServer()
 
-	binPath, err = gexec.Build("github.com/concourse/datadog-resource/cmd/out")
+	binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/out")
 	Expect(err).NotTo(HaveOccurred())
 
 	tmpDir, err = ioutil.TempDir("", "datadog_event_resource_out")
