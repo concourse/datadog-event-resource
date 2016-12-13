@@ -26,14 +26,14 @@ func main() {
 		panic(err)
 	}
 
-	output := make(Output, 0)
+	output := make(cmd.CheckResponse, 0)
 
 	var e datadog.Event
 	if payload.Version == nil {
 		if len(events) > 0 {
 			e = events[0]
 
-			output = output.AddEvent(e)
+			output = AddEvent(output, e)
 		}
 	} else {
 		switch len(events) {
@@ -41,7 +41,7 @@ func main() {
 			break
 		case 1:
 			e = events[0]
-			output = output.AddEvent(e)
+			output = AddEvent(output, e)
 			break
 		default:
 			needle, err := strconv.Atoi(payload.Version.Id)
@@ -51,7 +51,7 @@ func main() {
 
 			for _, e = range events {
 				if e.Id >= needle {
-					output = output.AddEvent(e)
+					output = AddEvent(output, e)
 				}
 			}
 
@@ -68,9 +68,7 @@ func main() {
 	json.NewEncoder(os.Stdout).Encode(&output)
 }
 
-type Output []cmd.Version
-
-func (o Output) AddEvent(e datadog.Event) Output {
+func AddEvent(o cmd.CheckResponse, e datadog.Event) cmd.CheckResponse {
 	return append(
 		o,
 		cmd.Version{
