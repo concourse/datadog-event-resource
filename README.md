@@ -6,6 +6,7 @@ Fetch or emit events to Datadog.
 ## Source Configuration
 
 * `application_key`: *Required.* The application key to use when accessing Datadog.
+
 * `api_key`: *Required.* The api key to use when accessing Datadog.
 
 
@@ -20,7 +21,23 @@ Detects new events that have been published to your Datadog event stream.
 
 Places the following files in the destination:
 
-* `event.json`: The event fetched, as JSON.<sup>[1](#example-event.json)</sup>
+* `event.json`: The event fetched, as JSON. Example:
+
+    ```json
+    {
+        "date_happened": 1346449298,
+        "handle": null,
+        "id": 1378859526682864843,
+        "priority": "normal",
+        "related_event_id": null,
+        "tags": [
+            "environment:test"
+        ],
+        "text": null,
+        "title": "Did you hear the news today?",
+        "url": "https://app.datadoghq.com/event/jump_to?event_id=1378859526682864843"
+    }
+    ```
 
 * `version`: The ID of the event fetched.
 
@@ -79,24 +96,4 @@ Emits an event based on the static configuration defined in your parameters.
     tags:
     - environment:test
     alert_type: info
-```
-
----
-
-<a name="example-event.json">1</a>:
-
-```json
-{
-    "date_happened": 1346449298, 
-    "handle": null, 
-    "id": 1378859526682864843, 
-    "priority": "normal", 
-    "related_event_id": null, 
-    "tags": [
-        "environment:test"
-    ], 
-    "text": null, 
-    "title": "Did you hear the news today?", 
-    "url": "https://app.datadoghq.com/event/jump_to?event_id=1378859526682864843"
-}
 ```
