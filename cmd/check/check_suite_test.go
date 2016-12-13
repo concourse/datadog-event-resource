@@ -43,6 +43,12 @@ var _ = AfterEach(func() {
 	fakeDataDogServer.Close()
 })
 
+func RunCheckSuccessfully(id *string) *gexec.Session {
+	sess := RunCheck(id)
+	Expect(sess).To(gexec.Exit(0))
+	return sess
+}
+
 func RunCheck(id *string) *gexec.Session {
 	var version *cmd.Version
 	if id != nil {
@@ -69,6 +75,5 @@ func RunCheck(id *string) *gexec.Session {
 	Expect(err).NotTo(HaveOccurred())
 
 	<-sess.Exited
-	Expect(sess).To(gexec.Exit(0))
 	return sess
 }

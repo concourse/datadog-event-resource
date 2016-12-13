@@ -23,7 +23,7 @@ var _ = Describe("Check", func() {
 			It("outputs an empty JSON", func() {
 				RespondWithEvents(nil)
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
 				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
@@ -32,27 +32,27 @@ var _ = Describe("Check", func() {
 		Context("when there is one event", func() {
 			It("outputs a single element array with that version as id", func() {
 				RespondWithEvents([]datadog.Event{
-					{Id: 100},
+					{Id: 100, Time: 10},
 				})
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
 				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
 		Context("when there are multiple events", func() {
-			It("outputs a single element array with the first version (most recent) as id", func() {
+			It("outputs a single element array with the most recent time version as id", func() {
 				RespondWithEvents([]datadog.Event{
-					{Id: 100},
-					{Id: 99},
-					{Id: 98},
-					{Id: 97},
+					{Id: 100, Time: 80},
+					{Id: 99, Time: 90},
+					{Id: 98, Time: 100},
+					{Id: 97, Time: 70},
 				})
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
-				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"98"}\]`))
 			})
 		})
 	})
@@ -66,7 +66,7 @@ var _ = Describe("Check", func() {
 			It("outputs an empty JSON", func() {
 				RespondWithEvents(nil)
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
 				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
@@ -75,27 +75,27 @@ var _ = Describe("Check", func() {
 		Context("when there is one event", func() {
 			It("outputs a single element array with that version as id", func() {
 				RespondWithEvents([]datadog.Event{
-					{Id: 100},
+					{Id: 100, Time: 100},
 				})
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
 				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
 		Context("when there are multiple events", func() {
-			It("outputs a single element array with the first version (most recent) as id", func() {
+			It("outputs a single element array with the most recent time version as id", func() {
 				RespondWithEvents([]datadog.Event{
-					{Id: 100},
-					{Id: 99},
-					{Id: 98},
-					{Id: 97},
+					{Id: 100, Time: 80},
+					{Id: 99, Time: 90},
+					{Id: 98, Time: 100},
+					{Id: 97, Time: 70},
 				})
 
-				session = RunCheck(nil)
+				session = RunCheckSuccessfully(nil)
 
-				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"98"}\]`))
 			})
 		})
 	})
@@ -106,7 +106,7 @@ var _ = Describe("Check", func() {
 		)
 
 		BeforeEach(func() {
-			id = "90"
+			id = "100"
 		})
 
 		AfterEach(func() {
@@ -117,7 +117,7 @@ var _ = Describe("Check", func() {
 			It("outputs an empty JSON", func() {
 				RespondWithEvents(nil)
 
-				session = RunCheck(&id)
+				session = RunCheckSuccessfully(&id)
 
 				Expect(session.Out).To(gbytes.Say("\\[\\]"))
 			})
@@ -129,24 +129,43 @@ var _ = Describe("Check", func() {
 					{Id: 100},
 				})
 
-				session = RunCheck(&id)
+				session = RunCheckSuccessfully(&id)
 
 				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"}\]`))
 			})
 		})
 
 		Context("when there are multiple events", func() {
-			It("outputs a array with the all events more recent (self-inclusive), reversed", func() {
+			It("outputs a array with the all events more recent (self-inclusive), reversed, with the needle at the beginning", func() {
 				RespondWithEvents([]datadog.Event{
-					{Id: 110},
-					{Id: 100},
-					{Id: 90},
-					{Id: 80},
+					{Id: 100, Time: 80},
+					{Id: 99, Time: 90},
+					{Id: 98, Time: 100},
+					{Id: 97, Time: 70},
+					{Id: 96, Time: 90},
+					{Id: 95, Time: 80},
 				})
 
-				session = RunCheck(&id)
+				session = RunCheckSuccessfully(&id)
 
-				Expect(session.Out).To(gbytes.Say(`\[{"id":"90"},{"id":"100"},{"id":"110"}\]`))
+				Expect(session.Out).To(gbytes.Say(`\[{"id":"100"},{"id":"95"},{"id":"96"},{"id":"99"},{"id":"98"}\]`))
+			})
+
+			Context("when the list of events does not include the one requested", func() {
+				It("outputs the most recent version", func() {
+					RespondWithEvents([]datadog.Event{
+						{Id: 101, Time: 80},
+						{Id: 99, Time: 90},
+						{Id: 98, Time: 100},
+						{Id: 97, Time: 70},
+						{Id: 96, Time: 90},
+						{Id: 95, Time: 80},
+					})
+
+					session = RunCheckSuccessfully(&id)
+
+					Expect(session.Out).To(gbytes.Say(`\[{"id":"98"}\]`))
+				})
 			})
 		})
 	})

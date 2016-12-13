@@ -8,6 +8,8 @@ import (
 
 	"time"
 
+	"sort"
+
 	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/zorkian/go-datadog-api"
 )
@@ -28,6 +30,8 @@ func main() {
 		panic(err)
 	}
 
+	sort.Sort(ByLaterDateAndEarlierId(events))
+
 	output := make(cmd.CheckResponse, 0)
 
 	var e datadog.Event
@@ -46,14 +50,35 @@ func main() {
 			output = AddEvent(output, e)
 			break
 		default:
-			needle, err := strconv.Atoi(payload.Version.Id)
+			i, err := strconv.Atoi(payload.Version.Id)
 			if err != nil {
 				panic(err)
 			}
 
+			var (
+				needle datadog.Event
+				found  bool
+			)
 			for _, e = range events {
-				if e.Id >= needle {
-					output = AddEvent(output, e)
+				if e.Id == i {
+					needle = e
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				e = events[0]
+				output = AddEvent(output, e)
+			} else {
+				for _, e = range events {
+					if e.Time >= needle.Time && e.Id != needle.Id {
+						output = AddEvent(output, e)
+					}
+				}
+
+				if found {
+					output = AddEvent(output, needle)
 				}
 			}
 
@@ -76,4 +101,12 @@ func AddEvent(o cmd.CheckResponse, e datadog.Event) cmd.CheckResponse {
 		cmd.Version{
 			Id: strconv.Itoa(e.Id),
 		})
+}
+
+type ByLaterDateAndEarlierId []datadog.Event
+
+func (a ByLaterDateAndEarlierId) Len() int      { return len(a) }
+func (a ByLaterDateAndEarlierId) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByLaterDateAndEarlierId) Less(i, j int) bool {
+	return a[i].Time > a[j].Time && a[i].Id < a[j].Id
 }
