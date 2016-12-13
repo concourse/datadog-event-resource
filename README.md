@@ -72,6 +72,13 @@ Emits an event based on the static configuration defined in your parameters. Bas
 ### Resource
 
 ```yaml
+resource_types:
+- name: datadog-event
+  type: docker-image
+  source:
+    repository: concourse/datadog-event-resource
+
+resources:
 - name: datadog-event
   type: datadog-event
   source:
