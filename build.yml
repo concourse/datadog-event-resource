@@ -1,0 +1,13 @@
+---
+platform: linux
+image: docker:///concourse/static-golang
+
+inputs:
+- name: datadog-event-resource
+  path: gopath/src/github.com/concourse/datadog-event-resource
+
+outputs:
+- name: built-resource
+
+run:
+  path: gopath/src/github.com/concourse/datadog-event-resource/scripts/ci
