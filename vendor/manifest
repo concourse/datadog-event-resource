@@ -1,0 +1,101 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/golang/protobuf/proto",
+			"repository": "https://github.com/golang/protobuf",
+			"vcs": "git",
+			"revision": "8ee79997227bf9b34611aee7946ae64735e6fd93",
+			"branch": "master",
+			"path": "/proto",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/golang/protobuf/ptypes/any",
+			"repository": "https://github.com/golang/protobuf",
+			"vcs": "git",
+			"revision": "8ee79997227bf9b34611aee7946ae64735e6fd93",
+			"branch": "master",
+			"path": "ptypes/any",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo/config",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
+			"branch": "master",
+			"path": "config",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo/ginkgo",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
+			"branch": "master",
+			"path": "/ginkgo",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo/internal/remote",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
+			"branch": "master",
+			"path": "internal/remote",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo/reporters",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
+			"branch": "master",
+			"path": "reporters",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/ginkgo/types",
+			"repository": "https://github.com/onsi/ginkgo",
+			"vcs": "git",
+			"revision": "00054c0bb96fc880d4e0be1b90937fad438c5290",
+			"branch": "master",
+			"path": "types",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/onsi/gomega",
+			"repository": "https://github.com/onsi/gomega",
+			"vcs": "git",
+			"revision": "f1f0f388b31eca4e2cbe7a6dd8a3a1dfddda5b1c",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/zorkian/go-datadog-api",
+			"repository": "https://github.com/zorkian/go-datadog-api",
+			"vcs": "git",
+			"revision": "a0a72fc5e4cae721b5144ba785f07f4edcf2cd47",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/sys/unix",
+			"repository": "https://go.googlesource.com/sys",
+			"vcs": "git",
+			"revision": "478fcf54317e52ab69f40bb4c7a1520288d7f7ea",
+			"branch": "master",
+			"path": "/unix",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/yaml.v2",
+			"repository": "https://gopkg.in/yaml.v2",
+			"vcs": "git",
+			"revision": "a5b47d31c556af34a302ce5d659e6fea44d90de0",
+			"branch": "v2",
+			"notests": true
+		}
+	]
+}
