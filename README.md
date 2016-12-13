@@ -14,7 +14,7 @@ Fetch or emit events to Datadog.
 
 ### `check`: Listen for events in the event stream.
 
-Detects new events that have been published to your Datadog event stream.
+Detects new events that have been published to the Datadog event stream.
 
 
 ### `in`: Fetch an event
@@ -26,14 +26,12 @@ Places the following files in the destination:
     ```json
     {
         "date_happened": 1346449298,
-        "handle": null,
         "id": 1378859526682864843,
         "priority": "normal",
-        "related_event_id": null,
         "tags": [
             "environment:test"
         ],
-        "text": null,
+        "text": "Oh boy!",
         "title": "Did you hear the news today?",
         "url": "https://app.datadoghq.com/event/jump_to?event_id=1378859526682864843"
     }
