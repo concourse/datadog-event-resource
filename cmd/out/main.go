@@ -6,18 +6,26 @@ import (
 
 	"strconv"
 
-	"github.com/concourse/datadog-event-resource/cmd"
-	"github.com/zorkian/go-datadog-api"
 	"strings"
 	"time"
+
+	"errors"
+
+	"io/ioutil"
+	"path/filepath"
+
+	"github.com/concourse/datadog-event-resource/cmd"
+	"github.com/zorkian/go-datadog-api"
 )
 
 func main() {
+	artifactDirectory := os.Args[1]
 	// Parse payload
 	var (
 		err     error
 		payload cmd.OutPayload
 	)
+
 	err = json.NewDecoder(os.Stdin).Decode(&payload)
 	if err != nil {
 		panic(err)
@@ -26,7 +34,11 @@ func main() {
 	// Use datadog client to get event
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
-	e := ConvertParamsToEvent(payload.Params)
+	e, err := ConvertParamsToEvent(payload.Params, artifactDirectory)
+	if err != nil {
+		panic(err)
+	}
+
 	event, err := c.PostEvent(&e)
 	if err != nil {
 		panic(err)
@@ -49,9 +61,22 @@ func main() {
 	}
 }
 
-func ConvertParamsToEvent(p cmd.OutParams) (e datadog.Event) {
+func ConvertParamsToEvent(p cmd.OutParams, artifactDirectory string) (datadog.Event, error) {
+	var (
+		e datadog.Event
+	)
 	e.Title = p.Title
-	e.Text = p.Text
+	if p.Text != "" {
+		e.Text = p.Text
+	} else if p.TextFile != "" {
+		b, err := ioutil.ReadFile(filepath.Join(artifactDirectory, p.TextFile))
+		if err != nil {
+			return e, err
+		}
+		e.Text = string(b)
+	} else {
+		return e, errors.New("No Text or TextFile found in params")
+	}
 	e.Priority = p.Priority
 	e.AlertType = p.AlertType
 	e.Host = p.Host
@@ -59,7 +84,7 @@ func ConvertParamsToEvent(p cmd.OutParams) (e datadog.Event) {
 	e.SourceType = p.SourceType
 	e.Tags = p.Tags
 
-	return
+	return e, nil
 }
 
 var layout = "2006-01-02 15:04:05 -0700"

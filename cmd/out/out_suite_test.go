@@ -11,9 +11,12 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"fmt"
 	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
+	"github.com/onsi/gomega/types"
+	"os"
 )
 
 func TestOut(t *testing.T) {
@@ -47,9 +50,11 @@ var _ = BeforeEach(func() {
 
 var _ = AfterEach(func() {
 	fakeDataDogServer.Close()
+	err := os.RemoveAll(tmpDir)
+	Expect(err).NotTo(HaveOccurred())
 })
 
-func RunOut(p cmd.OutParams) *gexec.Session {
+func RunOut(p cmd.OutParams, matchers ...types.GomegaMatcher) *gexec.Session {
 	payload := cmd.OutPayload{
 		Source: cmd.Source{
 			ApplicationKey: applicationKey,
@@ -68,6 +73,13 @@ func RunOut(p cmd.OutParams) *gexec.Session {
 	Expect(err).NotTo(HaveOccurred())
 
 	<-sess.Exited
-	Expect(sess).To(gexec.Exit(0))
+	if len(matchers) == 0 {
+		Expect(sess).To(gexec.Exit(0), fmt.Sprintf("Expected session to exit 0, exited with %d.\n\nStdout: %s\n\nStderr: %s", sess.ExitCode(), sess.Out.Contents(), sess.Err.Contents()))
+	} else {
+		for _, matcher := range matchers {
+			Expect(sess).To(matcher)
+		}
+	}
+
 	return sess
 }

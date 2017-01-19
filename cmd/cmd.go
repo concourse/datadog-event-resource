@@ -39,6 +39,7 @@ type OutPayload struct {
 type OutParams struct {
 	Title       string   `json:"title,omitempty"`
 	Text        string   `json:"text,omitempty"`
+	TextFile    string   `json:"text_file,omitempty"`
 	Priority    string   `json:"priority,omitempty"`
 	AlertType   string   `json:"alert_type,omitempty"`
 	Host        string   `json:"host,omitempty"`
