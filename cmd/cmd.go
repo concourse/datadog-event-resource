@@ -1,5 +1,7 @@
 package cmd
 
+import "errors"
+
 type Source struct {
 	ApplicationKey string `json:"application_key"`
 	ApiKey         string `json:"api_key"`
@@ -52,3 +54,5 @@ type OutResponse struct {
 	Version  Version    `json:"version"`
 	Metadata []Metadata `json:"metadata"`
 }
+
+var NoTextOrTextFileInOutParamsErr = errors.New("No Text or TextFile found in params")

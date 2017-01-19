@@ -226,7 +226,7 @@ var _ = Describe("Out", func() {
 		It("causes a panic", func() {
 			session = RunOut(params, Not(gexec.Exit(0)))
 
-			Expect(session.Err).To(gbytes.Say("No Text or TextFile found in params"))
+			Expect(session.Err).To(gbytes.Say(cmd.NoTextOrTextFileInOutParamsErr.Error()))
 		})
 	})
 })

@@ -9,8 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"errors"
-
 	"io/ioutil"
 	"path/filepath"
 
@@ -75,7 +73,7 @@ func ConvertParamsToEvent(p cmd.OutParams, artifactDirectory string) (datadog.Ev
 		}
 		e.Text = string(b)
 	} else {
-		return e, errors.New("No Text or TextFile found in params")
+		return e, cmd.NoTextOrTextFileInOutParamsErr
 	}
 	e.Priority = p.Priority
 	e.AlertType = p.AlertType
