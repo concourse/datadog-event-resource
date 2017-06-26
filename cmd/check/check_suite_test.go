@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 
 	"bytes"
+
 	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
@@ -43,13 +44,13 @@ var _ = AfterEach(func() {
 	fakeDataDogServer.Close()
 })
 
-func RunCheckSuccessfully(id *string) *gexec.Session {
-	sess := RunCheck(id)
+func RunCheckSuccessfully(id *string, filter string) *gexec.Session {
+	sess := RunCheck(id, filter)
 	Expect(sess).To(gexec.Exit(0))
 	return sess
 }
 
-func RunCheck(id *string) *gexec.Session {
+func RunCheck(id *string, filter string) *gexec.Session {
 	var version *cmd.Version
 	if id != nil {
 		version = &cmd.Version{
@@ -61,6 +62,7 @@ func RunCheck(id *string) *gexec.Session {
 		Source: cmd.Source{
 			ApplicationKey: applicationKey,
 			ApiKey:         apiKey,
+			Filter:         filter,
 		},
 		Version: version,
 	}

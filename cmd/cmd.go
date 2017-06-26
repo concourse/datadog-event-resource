@@ -5,6 +5,7 @@ import "errors"
 type Source struct {
 	ApplicationKey string `json:"application_key"`
 	ApiKey         string `json:"api_key"`
+	Filter         string `json:"filter,omitempty"`
 }
 
 type Version struct {

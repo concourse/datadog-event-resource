@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"regexp"
 
 	"strconv"
 
@@ -30,6 +31,12 @@ func main() {
 		panic(err)
 	}
 
+	if payload.Source.Filter != "" {
+		events, err = FilterEventsByTitle(events, payload.Source.Filter)
+		if err != nil {
+			panic(err)
+		}
+	}
 	sort.Sort(ByLaterDateAndEarlierId(events))
 
 	output := make(cmd.CheckResponse, 0)
@@ -109,4 +116,20 @@ func (a ByLaterDateAndEarlierId) Len() int      { return len(a) }
 func (a ByLaterDateAndEarlierId) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a ByLaterDateAndEarlierId) Less(i, j int) bool {
 	return a[i].Time > a[j].Time && a[i].Id < a[j].Id
+}
+
+func FilterEventsByTitle(events []datadog.Event, filter string) ([]datadog.Event, error) {
+	filterRegexp, err := regexp.Compile(filter)
+	if err != nil {
+		return nil, err
+	}
+
+	filteredEvents := []datadog.Event{}
+	for _, event := range events {
+		if filterRegexp.MatchString(event.Title) {
+			filteredEvents = append(filteredEvents, event)
+		}
+	}
+
+	return filteredEvents, nil
 }
