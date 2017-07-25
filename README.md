@@ -9,6 +9,8 @@ Fetch or emit events to Datadog.
 
 * `api_key`: *Required.* The api key to use when accessing Datadog.
 
+* `filter`: *Optional.* Regexp to filter events by title when checking.
+
 
 ## Behavior
 
@@ -94,6 +96,7 @@ resources:
   source:
     api_key: API-KEY
     application_key: APPLICATION-KEY
+    filter: "event-.*-regexp"
 ```
 
 ### Plan
