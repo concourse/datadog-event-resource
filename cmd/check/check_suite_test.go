@@ -1,6 +1,8 @@
 package main_test
 
 import (
+	"os"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
@@ -36,8 +38,12 @@ var _ = BeforeEach(func() {
 
 	fakeDataDogServer = ghttp.NewServer()
 
-	binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/check")
-	Expect(err).NotTo(HaveOccurred())
+	if _, err = os.Stat("/opt/resource/check"); err == nil {
+		binPath = "/opt/resource/check"
+	} else {
+		binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/check")
+		Expect(err).NotTo(HaveOccurred())
+	}
 })
 
 var _ = AfterEach(func() {

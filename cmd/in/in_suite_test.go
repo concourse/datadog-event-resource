@@ -1,6 +1,8 @@
 package main_test
 
 import (
+	"os"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
@@ -13,10 +15,11 @@ import (
 
 	"io/ioutil"
 
+	"strconv"
+
 	"github.com/concourse/datadog-event-resource/cmd"
 	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
-	"strconv"
 )
 
 func TestIn(t *testing.T) {
@@ -43,8 +46,12 @@ var _ = BeforeEach(func() {
 
 	fakeDataDogServer = ghttp.NewServer()
 
-	binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/in")
-	Expect(err).NotTo(HaveOccurred())
+	if _, err = os.Stat("/opt/resource/in"); err == nil {
+		binPath = "/opt/resource/in"
+	} else {
+		binPath, err = gexec.Build("github.com/concourse/datadog-event-resource/cmd/in")
+		Expect(err).NotTo(HaveOccurred())
+	}
 
 	tmpDir, err = ioutil.TempDir("", "datadog_event_resource_in")
 	Expect(err).NotTo(HaveOccurred())
