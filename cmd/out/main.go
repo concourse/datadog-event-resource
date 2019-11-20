@@ -75,6 +75,13 @@ func ConvertParamsToEvent(p cmd.OutParams, artifactDirectory string) (datadog.Ev
 	} else {
 		return e, cmd.NoTextOrTextFileInOutParamsErr
 	}
+	e.Text = os.Expand(e.Text, func(v string) string {
+		switch v {
+		case "BUILD_ID", "BUILD_NAME", "BUILD_JOB_NAME", "BUILD_PIPELINE_NAME", "BUILD_TEAM_NAME", "ATC_EXTERNAL_URL":
+			return os.Getenv(v)
+		}
+		return "$" + v
+	})
 	e.Priority = p.Priority
 	e.AlertType = p.AlertType
 	e.Host = p.Host

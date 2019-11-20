@@ -76,7 +76,9 @@ var _ = Describe("Out", func() {
 
 			returnedEvent.Id = 1234
 			returnedEvent.Time = int(t.Unix())
+		})
 
+		JustBeforeEach(func() {
 			fakeDataDogServer.AppendHandlers(
 				ghttp.CombineHandlers(
 					ghttp.VerifyRequest("POST", "/api/v1/events"),
@@ -91,6 +93,18 @@ var _ = Describe("Out", func() {
 		It("creates the event via the API", func() {
 			session = RunOut(params)
 			Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(1))
+		})
+
+		Context("when text contains environment variable references", func() {
+			BeforeEach(func() {
+				params.Text = "url: $ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME $THIS_IS_NOT_ALLOWED"
+				event.Text = "url: https://concourse.example.com/teams/main/pipelines/my-pipeline/jobs/my-job/builds/my-build $THIS_IS_NOT_ALLOWED"
+			})
+
+			It("interpolates build metadata", func() {
+				session = RunOut(params)
+				Expect(fakeDataDogServer.ReceivedRequests()).To(HaveLen(1))
+			})
 		})
 
 		It("emits metadata about the event", func() {
