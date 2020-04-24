@@ -73,7 +73,17 @@ func RunOut(p cmd.OutParams, matchers ...types.GomegaMatcher) *gexec.Session {
 
 	c := exec.Command(binPath, tmpDir)
 	c.Stdin = bytes.NewBuffer(b)
-	c.Env = append(c.Env, "DATADOG_HOST=http://"+fakeDataDogServer.Addr())
+	envVars := map[string]string{
+		"ATC_EXTERNAL_URL":    "https://concourse.example.com",
+		"BUILD_TEAM_NAME":     "main",
+		"BUILD_PIPELINE_NAME": "my-pipeline",
+		"BUILD_JOB_NAME":      "my-job",
+		"BUILD_NAME":          "my-build",
+		"DATADOG_HOST":        "http://" + fakeDataDogServer.Addr(),
+	}
+	for k, v := range envVars {
+		c.Env = append(c.Env, fmt.Sprintf("%s=%s", k, v))
+	}
 	sess, err := gexec.Start(c, GinkgoWriter, GinkgoWriter)
 	Expect(err).NotTo(HaveOccurred())
 
