@@ -22,6 +22,10 @@ func main() {
 		panic(err)
 	}
 
+	if payload.Source.DatadogHost != "" {
+		os.Setenv("DATADOG_HOST", payload.Source.DatadogHost)
+	}
+
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
 	end := int(time.Now().Add(24 * time.Hour).Unix())
