@@ -11,6 +11,8 @@ Fetch or emit events to Datadog.
 
 * `filter`: *Optional.* Regexp to filter events by title when checking.
 
+* `datadog_host`: *Optional.* Datadog host url to switch from US to Europe datacenter, default to US.
+
 
 ## Behavior
 
