@@ -31,6 +31,10 @@ func main() {
 		panic(err)
 	}
 
+	if payload.Source.DatadogHost != "" {
+		os.Setenv("DATADOG_HOST", payload.Source.DatadogHost)
+	}
+
 	// Use datadog client to get event
 	c := datadog.NewClient(payload.Source.ApiKey, payload.Source.ApplicationKey)
 
