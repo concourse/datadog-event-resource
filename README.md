@@ -145,3 +145,32 @@ docker build -t datadog-event-resource --targe tests -f dockerfiles/ubuntu/Docke
 
 Please make all pull requests to the `master` branch and ensure tests pass
 locally.
+
+## Caveats
+
+Unless you are planning on using datadog events for triggering jobs, make sure to disable automatic resource checking, like so:
+
+
+```yaml
+resources:
+- name: datadog-event
+  type: datadog-event
+  check_every: never
+  source:
+    api_key: API-KEY
+    application_key: APPLICATION-KEY
+```
+
+And in case you do plan on using datadog events to trigger jobs, make sure you're using event filtering:
+
+```yaml
+resources:
+- name: datadog-event
+  type: datadog-event
+  source:
+    api_key: API-KEY
+    application_key: APPLICATION-KEY
+    filter: "event-.*-regexp"
+```
+
+Otherwise you're running a risk of bloating the concourse database if the volume of events going through datadog is high enough.
