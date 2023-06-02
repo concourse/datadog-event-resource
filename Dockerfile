@@ -1,7 +1,7 @@
-ARG base_image=alpine:latest
+ARG base_image
 ARG builder_image=concourse/golang-builder
 
-FROM ${builder_image} as builder
+FROM ${builder_image} AS builder
 WORKDIR /src
 COPY . .
 RUN go mod download
@@ -13,8 +13,7 @@ RUN set -e; for pkg in $(go list ./...); do \
 	done
 
 FROM ${base_image} AS resource
-RUN apk update && apk upgrade
-RUN apk add --update bash ca-certificates
+USER root
 COPY --from=builder /assets /opt/resource
 
 FROM resource AS tests
