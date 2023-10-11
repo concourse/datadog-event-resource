@@ -9,7 +9,7 @@ require (
 	github.com/onsi/gomega v0.0.0-20161118205129-f1f0f388b31e
 	github.com/zorkian/go-datadog-api v0.0.0-20161207174101-a0a72fc5e4ca
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a // indirect
-	golang.org/x/sys v0.0.0-20161205170828-478fcf54317e // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.0.0-20160928153709-a5b47d31c556 // indirect
 )
